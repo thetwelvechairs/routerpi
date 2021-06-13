@@ -1,8 +1,8 @@
 sudo bash -c '
-# usb / eth1 / wan
-ETH1=""
-# eth0 / lan
-ETH0=""
+# usb / eth1 / wan MAC ADDRESS
+ETH1="eth1"
+# eth0 / lan MAC ADDRESS
+ETH0="eth0"
 
 ROUTER_IP="10.0.1.1"
 
@@ -25,7 +25,7 @@ sudo apt-get install isc-dhcp-server -y
 
 sed -i "s/INTERFACESv4=\".*/INTERFACESv4=\"lan\"/" /etc/default/isc-dhcp-server
 sed -i "s/option domain-name .*/option domain-name \"router.local\";/" /etc/dhcp/dhcpd.conf
-sed -i "s/option domain-name-servers .*/option domain-name-servers 8.8.8.8, 1.1.1.1;/" /etc/dhcp/dhcpd.conf
+sed -i "s/option domain-name-servers .*/option domain-name-servers 10.0.1.2, 8.8.8.8, 1.1.1.1;/" /etc/dhcp/dhcpd.conf
 
 echo "authoritative;
 subnet 10.0.1.0 netmask 255.255.255.0 {
