@@ -49,4 +49,6 @@ sudo firewall-cmd --zone=home --add-service=dns
 sudo firewall-cmd --zone=home --add-service=dhcp
 
 sudo firewall-cmd --runtime-to-permanent
+
+sudo iptables -A INPUT -i eth1 -p tcp --dport 22 -j DROP
 '
