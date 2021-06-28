@@ -25,7 +25,7 @@ sudo apt-get install isc-dhcp-server -y
 
 sed -i "s/INTERFACESv4=\".*/INTERFACESv4=\"lan\"/" /etc/default/isc-dhcp-server
 sed -i "s/option domain-name .*/option domain-name \"router.local\";/" /etc/dhcp/dhcpd.conf
-sed -i "s/option domain-name-servers .*/option domain-name-servers 10.0.1.2, 8.8.8.8, 1.1.1.1;/" /etc/dhcp/dhcpd.conf
+sed -i "s/option domain-name-servers .*/option domain-name-servers 10.0.1.2;/" /etc/dhcp/dhcpd.conf
 
 echo "authoritative;
 subnet 10.0.1.0 netmask 255.255.255.0 {
@@ -41,6 +41,7 @@ echo "host router {
 
 sudo systemctl restart isc-dhcp-server -y
 
+# Add basic firewall rules
 sudo firewall-cmd --zone=home --add-interface=lan
 sudo firewall-cmd --zone=public --add-interface=ppp0
 sudo firewall-cmd --zone=public --add-interface=wan
@@ -50,5 +51,6 @@ sudo firewall-cmd --zone=home --add-service=dhcp
 
 sudo firewall-cmd --runtime-to-permanent
 
-sudo iptables -A INPUT -i eth1 -p tcp --dport 22 -j DROP
+# Disable SSH on WAN
+sed -i "s/#ListenAddress.*/ListenAddress "${ROUTER_IP}"/" /etc/ssh/sshd_config
 '
