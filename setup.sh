@@ -54,6 +54,7 @@ sudo firewall-cmd --zone=public --add-masquerade
 sudo firewall-cmd --zone=home --add-interface=lan
 sudo firewall-cmd --zone=home --add-service=dns
 sudo firewall-cmd --zone=home --add-service=dhcp
+sudo firewall-cmd --remove-service=ssh --zone=public
 sudo firewall-cmd --runtime-to-permanent
 
 # Disable SSH on WAN
