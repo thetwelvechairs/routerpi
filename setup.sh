@@ -6,9 +6,7 @@ ETH0=""
 
 ROUTER_IP="10.0.1.1"
 
-sudo apt-get install isc-dhcp-server firewalld ufw fail2ban -y
-sudo ufw limit ssh/tcp
-sudo ufw enable
+sudo apt-get install isc-dhcp-server firewalld fail2ban -y
 
 echo "SUBSYSTEM==\"net\", ACTION==\"add\", ATTR{address}==\""${ETH1}"\", NAME=\"wan\"
 SUBSYSTEM==\"net\", ACTION==\"add\", ATTR{address}==\""${ETH0}"\", NAME=\"lan\"
@@ -31,12 +29,12 @@ sudo systemctl disable dhcpcd
 
 sed -i "s/INTERFACESv4=\".*/INTERFACESv4=\"lan\"/" /etc/default/isc-dhcp-server
 sed -i "s/option domain-name .*/option domain-name \"router.local\";/" /etc/dhcp/dhcpd.conf
-sed -i "s/option domain-name-servers .*/option domain-name-servers 10.0.1.2;/" /etc/dhcp/dhcpd.conf
 
 echo "authoritative;
 subnet 10.0.1.0 netmask 255.255.255.0 {
         range 10.0.1.10 10.0.1.100;
         option routers "${ROUTER_IP}";
+        option domain-name-servers "${ROUTER_IP%?}"2;
         option subnet-mask 255.255.255.0;
 }" >> /etc/dhcp/dhcpd.conf
 
